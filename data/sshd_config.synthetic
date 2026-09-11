@@ -1,0 +1,14 @@
+# Fictional exported sshd_config for defensive assessment only
+Port 22
+ListenAddress 10.50.10.12
+PermitRootLogin yes
+PasswordAuthentication yes
+PubkeyAuthentication yes
+PermitEmptyPasswords no
+MaxAuthTries 6
+X11Forwarding yes
+AllowTcpForwarding yes
+ClientAliveInterval 300
+ClientAliveCountMax 2
+LogLevel VERBOSE
+AllowGroups ssh-admins
