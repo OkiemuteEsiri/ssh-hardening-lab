@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile source
+        run: python -m compileall -q src tests
+      - name: Run unit tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Generate synthetic report
+        env:
+          PYTHONPATH: src
+        run: python src/cli.py data/sshd_config.synthetic --target lab-admin-01 --admin-cidr 10.50.0.0/16 --output /tmp/ssh-assessment.md
+      - name: Verify generated report
+        run: test -s /tmp/ssh-assessment.md
